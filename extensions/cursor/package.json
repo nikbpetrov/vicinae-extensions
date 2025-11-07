@@ -1,5 +1,5 @@
 {
-  "$schema": "https://www.raycast.com/schemas/extension.json",
+  "$schema": "https://raw.githubusercontent.com/vicinaehq/vicinae/refs/heads/main/extra/schemas/extension.json",
   "name": "cursor-recent-projects",
   "title": "Cursor",
   "description": "Control Cursor, Cursor & Codium directly from Raycast - Search and open recent projects, handle extensions and commands.",
@@ -126,7 +126,7 @@
     }
   ],
   "dependencies": {
-    "@raycast/api": "^1.83.1",
+    "@vicinae/api": "^0.16.2",
     "@raycast/utils": "^1.17.0",
     "lodash.get": "^4.4.2",
     "raycast-cross-extension": "^0.2.3",
@@ -134,24 +134,17 @@
     "tildify": "^3.0.0"
   },
   "devDependencies": {
-    "@raycast/eslint-config": "1.0.5",
     "@types/lodash.get": "^4.4.9",
     "@types/node": "20.12.7",
     "@types/react": "18.2.79",
     "@types/sql.js": "^1.4.9",
-    "eslint": "^8.57.1",
-    "eslint-plugin-react": "^7.36.1",
-    "prettier": "^2.8.8",
-    "typescript": "^5.6.2"
+    "typescript": "^5.9.2",
+    "@biomejs/biome": "2.3.2"
   },
   "scripts": {
-    "build": "ray build -e dist",
-    "dev": "ray develop",
-    "fix-lint": "ray lint --fix",
-    "lint": "ray lint",
-    "publish": "npx @raycast/api@latest publish"
-  },
-  "platforms": [
-    "macOS"
-  ]
+    "build": "vici build",
+    "dev": "vici develop",
+    "format": "biome format --write src",
+    "lint": "vici lint"
+  }
 }

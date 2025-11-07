@@ -10,7 +10,7 @@ import {
   WorkspaceEntry,
   RemoteWorkspaceEntry,
 } from "./types";
-import { open } from "@raycast/api";
+import { open } from "@vicinae/api";
 import * as fs from "fs";
 
 // Type Guards

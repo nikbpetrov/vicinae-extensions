@@ -1,4 +1,4 @@
-import { Action, ActionPanel, Color, List, showToast, Toast } from "@raycast/api";
+import { Action, ActionPanel, Color, List, showToast, Toast } from "@vicinae/api";
 import { useState, useEffect } from "react";
 import { getErrorMessage } from "./utils";
 import type { Extension } from "./lib/cursor";

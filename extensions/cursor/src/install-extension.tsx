@@ -1,4 +1,4 @@
-import { Action, ActionPanel, Color, Icon, List, showToast, Toast } from "@raycast/api";
+import { Action, ActionPanel, Color, Icon, List, showToast, Toast } from "@vicinae/api";
 import { useFetch } from "@raycast/utils";
 import { useState } from "react";
 import {

@@ -1,5 +1,5 @@
 import { createContext, useContext, ReactNode } from "react";
-import { open, showHUD } from "@raycast/api";
+import { open, showHUD } from "@vicinae/api";
 import { run } from "../integrations/cursor-directory";
 import { runAppleScriptSync } from "run-applescript";
 import { LaunchContext } from "../integrations/types";

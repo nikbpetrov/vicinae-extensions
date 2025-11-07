@@ -1,4 +1,4 @@
-import { List, Grid } from "@raycast/api";
+import { List, Grid } from "@vicinae/api";
 import { layout } from "./preferences";
 
 export type ListType = "list";

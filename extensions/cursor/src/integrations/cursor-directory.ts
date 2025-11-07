@@ -1,6 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
-import { showHUD } from "@raycast/api";
+import { showHUD } from "@vicinae/api";
 import { CursorDirectoryContext } from "./types";
 
 // Ensure that the .cursorrules file exists in the project directory

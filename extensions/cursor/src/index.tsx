@@ -1,4 +1,4 @@
-import { ActionPanel, Action, Grid, Icon, showToast, open, Toast, LaunchProps, Color } from "@raycast/api";
+import { ActionPanel, Action, Grid, Icon, showToast, open, Toast, LaunchProps, Color } from "@vicinae/api";
 import { useEffect, useState } from "react";
 import { basename, dirname } from "path";
 import tildify from "tildify";

@@ -1,4 +1,4 @@
-import { Alert, Icon, Toast, confirmAlert, showToast } from "@raycast/api";
+import { Alert, Icon, Toast, confirmAlert, showToast } from "@vicinae/api";
 import { useSQL } from "@raycast/utils";
 import { homedir } from "os";
 import { EntryLike, RecentEntries } from "./types";

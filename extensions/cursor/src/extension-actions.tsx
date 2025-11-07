@@ -1,4 +1,4 @@
-import { showToast, Toast, Action, Icon, Color, confirmAlert, Alert, showHUD } from "@raycast/api";
+import { showToast, Toast, Action, Icon, Color, confirmAlert, Alert, showHUD } from "@vicinae/api";
 import { getCursorCLI } from "./lib/cursor";
 import { getErrorMessage } from "./utils";
 

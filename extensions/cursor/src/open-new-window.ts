@@ -1,4 +1,4 @@
-import { Toast, closeMainWindow, showToast } from "@raycast/api";
+import { Toast, closeMainWindow, showToast } from "@vicinae/api";
 import { runAppleScript } from "@raycast/utils";
 
 const makeNewWindow = async () => {
