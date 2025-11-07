@@ -7,18 +7,24 @@ import { LaunchContext } from "../integrations/types";
 import { callbackLaunchCommand } from "raycast-cross-extension";
 
 interface ProjectContextType {
-  openProject: (uri: string, closeOtherWindows: boolean) => Promise<void>;
+	openProject: (uri: string, closeOtherWindows: boolean) => Promise<void>;
 }
 
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
 
-export function ProjectProvider({ children, launchContext }: { children: ReactNode; launchContext?: LaunchContext }) {
-  const openProject = async (uri: string, closeOtherWindows: boolean) => {
-    try {
-      // Close other windows only works on macOS via AppleScript
-      // On Linux/Windows, this feature is not available
-      if (closeOtherWindows && platform === "darwin") {
-        runAppleScriptSync(`
+export function ProjectProvider({
+	children,
+	launchContext,
+}: {
+	children: ReactNode;
+	launchContext?: LaunchContext;
+}) {
+	const openProject = async (uri: string, closeOtherWindows: boolean) => {
+		try {
+			// Close other windows only works on macOS via AppleScript
+			// On Linux/Windows, this feature is not available
+			if (closeOtherWindows && platform === "darwin") {
+				runAppleScriptSync(`
             tell application "System Events"
               tell process "Cursor"
                 repeat while window 1 exists
@@ -27,36 +33,40 @@ export function ProjectProvider({ children, launchContext }: { children: ReactNo
               end tell
             end tell
             `);
-      }
-      await open(uri, "Cursor");
+			}
+			await open(uri, "Cursor");
 
-      const { cursorDirectory, callbackLaunchOptions } = launchContext || {};
+			const { cursorDirectory, callbackLaunchOptions } = launchContext || {};
 
-      if (cursorDirectory && cursorDirectory.ruleContent) {
-        await run(uri, {
-          ruleContent: cursorDirectory.ruleContent,
-          replace: cursorDirectory.replace,
-        });
-      }
-      if (callbackLaunchOptions) {
-        callbackLaunchCommand(callbackLaunchOptions, {
-          // TODO should be determined what we want to expose
-          projectPath: uri.split("file://").slice(1).join("/"),
-        });
-      }
-    } catch (error) {
-      console.error("Error opening project:", error);
-      await showHUD("Failed to open project");
-    }
-  };
+			if (cursorDirectory && cursorDirectory.ruleContent) {
+				await run(uri, {
+					ruleContent: cursorDirectory.ruleContent,
+					replace: cursorDirectory.replace,
+				});
+			}
+			if (callbackLaunchOptions) {
+				callbackLaunchCommand(callbackLaunchOptions, {
+					// TODO should be determined what we want to expose
+					projectPath: uri.split("file://").slice(1).join("/"),
+				});
+			}
+		} catch (error) {
+			console.error("Error opening project:", error);
+			await showHUD("Failed to open project");
+		}
+	};
 
-  return <ProjectContext.Provider value={{ openProject }}>{children}</ProjectContext.Provider>;
+	return (
+		<ProjectContext.Provider value={{ openProject }}>
+			{children}
+		</ProjectContext.Provider>
+	);
 }
 
 export function useProject() {
-  const context = useContext(ProjectContext);
-  if (context === undefined) {
-    throw new Error("useProject must be used within a ProjectProvider");
-  }
-  return context;
+	const context = useContext(ProjectContext);
+	if (context === undefined) {
+		throw new Error("useProject must be used within a ProjectProvider");
+	}
+	return context;
 }

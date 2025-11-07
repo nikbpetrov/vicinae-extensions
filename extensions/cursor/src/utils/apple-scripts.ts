@@ -10,5 +10,5 @@ on error
 end try
 `;
 export const getCurrentFinderPath = async () => {
-  return await runAppleScript(getCurrentFinderPathScript);
+	return await runAppleScript(getCurrentFinderPathScript);
 };

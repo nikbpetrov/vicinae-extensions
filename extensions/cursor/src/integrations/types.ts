@@ -1,11 +1,11 @@
 import { LaunchOptions } from "raycast-cross-extension";
 
 export interface CursorDirectoryContext {
-  ruleContent: string;
-  replace?: boolean;
+	ruleContent: string;
+	replace?: boolean;
 }
 
 export type LaunchContext = {
-  cursorDirectory?: Partial<CursorDirectoryContext>;
-  callbackLaunchOptions?: LaunchOptions;
+	cursorDirectory?: Partial<CursorDirectoryContext>;
+	callbackLaunchOptions?: LaunchOptions;
 };
