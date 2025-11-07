@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { basename, dirname } from "path";
 import tildify from "tildify";
 import { fileURLToPath } from "url";
+import { platform } from "process";
 import { useRecentEntries } from "./db";
 import type { RemoveMethods } from "./db";
 import { keepSectionOrder, closeOtherWindows, terminalApp, showGitBranch, gitBranchColor, layout } from "./preferences";
@@ -37,8 +38,6 @@ export default function Command(props: LaunchProps<{ launchContext: LaunchContex
   const { pinnedEntries, ...pinnedMethods } = usePinnedEntries();
 
   if (error) {
-    console.log(error);
-
     showToast(Toast.Style.Failure, "Failed to load recent projects");
   }
 
@@ -76,7 +75,7 @@ function EntryTypeDropdown(props: { onChange: (type: EntryType) => void }) {
       tooltip="Filter project types"
       defaultValue={EntryType.AllTypes}
       storeValue
-      onChange={(value) => props.onChange(value as EntryType)}
+      onChange={(value: string) => props.onChange(value as EntryType)}
     >
       <ListOrGridDropdownItem title="All Types" value="All Types" />
       <ListOrGridDropdownSection>
@@ -157,8 +156,8 @@ function LocalItem(props: { entry: EntryLike; uri: string; pinned?: boolean } & 
 
   const { openProject } = useProject();
 
-  const handleOpenProject = (revert = false) => {
-    openProject(props.uri, closeOtherWindows !== revert);
+  const handleOpenProject = async (revert = false) => {
+    await openProject(props.uri, closeOtherWindows !== revert);
   };
 
   const accessories = [];
@@ -190,15 +189,27 @@ function LocalItem(props: { entry: EntryLike; uri: string; pinned?: boolean } & 
       actions={
         <ActionPanel>
           <ActionPanel.Section>
-            <Action title={getTitle()} icon="action-icon.png" onAction={() => handleOpenProject()} />
+            <Action title={getTitle()} icon="action-icon.png" onAction={async () => await handleOpenProject()} />
+            {platform === "darwin" && Action.ShowInFinder ? (
             <Action.ShowInFinder path={path} />
+            ) : (
+              <Action
+                title="Reveal in File Manager"
+                icon={Icon.Finder}
+                onAction={() => {
+                  open(path).catch(() => showToast(Toast.Style.Failure, "Failed to reveal in file manager"));
+                }}
+              />
+            )}
             <Action
               title={getTitle(true)}
               icon="action-icon.png"
-              onAction={() => handleOpenProject(true)}
+              onAction={async () => await handleOpenProject(true)}
               shortcut={{ modifiers: ["cmd", "shift"], key: "enter" }}
             />
+            {platform === "darwin" && Action.OpenWith ? (
             <Action.OpenWith path={path} shortcut={{ modifiers: ["cmd"], key: "o" }} />
+            ) : null}
             {isFolderEntry(props.entry) && terminalApp && (
               <Action
                 title={`Open with ${terminalApp.name}`}

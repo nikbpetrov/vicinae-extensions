@@ -2,6 +2,7 @@ import { fileExists } from "../utils";
 import * as afs from "fs/promises";
 import * as os from "os";
 import path from "path";
+import { platform } from "process";
 import * as child_process from "child_process";
 
 interface ExtensionMetaRoot {
@@ -66,7 +67,27 @@ function getNLSVariable(text: string | undefined): string | undefined {
 }
 
 export function getCursorCLIFilename(): string {
-  return "/Applications/Cursor.app/Contents/Resources/app/bin/cursor";
+  if (platform === "darwin") {
+    // macOS: Cursor CLI is inside the app bundle
+    return "/Applications/Cursor.app/Contents/Resources/app/bin/cursor";
+  } else if (platform === "linux") {
+    // Linux: Cursor CLI should be in PATH (installed via .deb/.rpm package or manually)
+    // execFileSync will find it in PATH if it's available
+    return "cursor";
+  } else if (platform === "win32") {
+    // Windows: Cursor CLI might be in various locations
+    // Common locations:
+    // - %LOCALAPPDATA%\Programs\Cursor\resources\app\bin\cursor.cmd
+    // - Or in PATH as "cursor"
+    const localAppData = process.env.LOCALAPPDATA || "";
+    if (localAppData) {
+      return path.join(localAppData, "Programs", "Cursor", "resources", "app", "bin", "cursor.cmd");
+    }
+    return "cursor"; // Fallback to PATH
+  }
+  
+  // Default: assume cursor is in PATH
+  return "cursor";
 }
 
 export class CursorCLI {

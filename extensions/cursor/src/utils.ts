@@ -91,6 +91,7 @@ export function isSameEntry(a: EntryLike, b: EntryLike) {
 export function filterEntriesByType(filter: EntryType | null) {
   switch (filter) {
     case "All Types":
+    case null:
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       return (entry: EntryLike) => true;
     case "Workspaces":

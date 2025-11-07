@@ -2,6 +2,7 @@ import { createContext, useContext, ReactNode } from "react";
 import { open, showHUD } from "@vicinae/api";
 import { run } from "../integrations/cursor-directory";
 import { runAppleScriptSync } from "run-applescript";
+import { platform } from "process";
 import { LaunchContext } from "../integrations/types";
 import { callbackLaunchCommand } from "raycast-cross-extension";
 
@@ -14,7 +15,9 @@ const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
 export function ProjectProvider({ children, launchContext }: { children: ReactNode; launchContext?: LaunchContext }) {
   const openProject = async (uri: string, closeOtherWindows: boolean) => {
     try {
-      if (closeOtherWindows) {
+      // Close other windows only works on macOS via AppleScript
+      // On Linux/Windows, this feature is not available
+      if (closeOtherWindows && platform === "darwin") {
         runAppleScriptSync(`
             tell application "System Events"
               tell process "Cursor"

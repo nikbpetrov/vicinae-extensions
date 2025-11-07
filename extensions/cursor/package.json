@@ -47,18 +47,6 @@
       "subtitle": "Cursor",
       "description": "Opens a new Cursor window.",
       "mode": "no-view"
-    },
-    {
-      "name": "extensions",
-      "title": "Show Installed Extensions",
-      "description": "Manage Installed Extensions",
-      "mode": "view"
-    },
-    {
-      "name": "install-extension",
-      "title": "Install Extension",
-      "description": "Install Extensions from the Cursor Marketplace",
-      "mode": "view"
     }
   ],
   "preferences": [
