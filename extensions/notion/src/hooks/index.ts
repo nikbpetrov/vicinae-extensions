@@ -1,5 +1,4 @@
-import { LocalStorage } from "@raycast/api";
-import { showToast } from "@vicinae/api";
+import { LocalStorage, showToast } from "@vicinae/api";
 import { useCachedPromise } from "@raycast/utils";
 import { useState } from "react";
 
