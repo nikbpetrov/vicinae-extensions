@@ -4,39 +4,39 @@ import { getPreferences } from "../preferences";
 import { Favorite, useFavorites } from "./hooks";
 
 export function Favorites() {
-  const { favorites, isLoading } = useFavorites();
+	const { favorites, isLoading } = useFavorites();
 
-  return (
-    <List isLoading={isLoading}>
-      <List.Section title="Favorites" subtitle={String(favorites.length)}>
-        {favorites.map((result) => (
-          <Item key={result.fullpath} result={result} />
-        ))}
-      </List.Section>
-    </List>
-  );
+	return (
+		<List isLoading={isLoading}>
+			<List.Section title="Favorites" subtitle={String(favorites.length)}>
+				{favorites.map((result) => (
+					<Item key={result.fullpath} result={result} />
+				))}
+			</List.Section>
+		</List>
+	);
 }
 
 function Item({ result }: { result: Favorite }) {
-  const preferences = getPreferences();
-  const hostname = preferences.hostname;
+	const preferences = getPreferences();
+	const hostname = preferences.hostname;
 
-  const url = path.extname(result.filename)
-    ? `https://${hostname}/apps/files/?dir=${encodeURI(result.dirname)}&view=files`
-    : `https://${hostname}/apps/files/?dir=${encodeURI(result.fullpath)}&view=files`;
+	const url = path.extname(result.filename)
+		? `https://${hostname}/apps/files/?dir=${encodeURI(result.dirname)}&view=files`
+		: `https://${hostname}/apps/files/?dir=${encodeURI(result.fullpath)}&view=files`;
 
-  return (
-    <List.Item
-      title={result.filename}
-      accessoryTitle={result.dirname}
-      icon={{ source: Icon.Star, tintColor: Color.Orange }}
-      actions={
-        <ActionPanel title={result.filename}>
-          <ActionPanel.Section>
-            <Action.OpenInBrowser title="Open in Browser" url={url} />
-          </ActionPanel.Section>
-        </ActionPanel>
-      }
-    />
-  );
+	return (
+		<List.Item
+			title={result.filename}
+			accessoryTitle={result.dirname}
+			icon={{ source: Icon.Star, tintColor: Color.Orange }}
+			actions={
+				<ActionPanel title={result.filename}>
+					<ActionPanel.Section>
+						<Action.OpenInBrowser title="Open in Browser" url={url} />
+					</ActionPanel.Section>
+				</ActionPanel>
+			}
+		/>
+	);
 }
