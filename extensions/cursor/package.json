@@ -35,13 +35,6 @@
       "mode": "view"
     },
     {
-      "name": "open-with-cursor",
-      "title": "Open with Cursor",
-      "subtitle": "Cursor",
-      "description": "Opens the currently selected Finder item with Cursor.",
-      "mode": "no-view"
-    },
-    {
       "name": "open-new-window",
       "title": "Open New Window",
       "subtitle": "Cursor",
