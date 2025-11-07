@@ -1,4 +1,4 @@
-import { closeMainWindow, getPreferenceValues, open } from "@raycast/api";
+import { closeMainWindow, getPreferenceValues, open } from "@vicinae/api";
 
 import { Page } from "./notion/page";
 
