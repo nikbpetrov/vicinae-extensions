@@ -1,8 +1,7 @@
 import { environment, showToast, Toast } from "@vicinae/api";
 import { XMLParser } from "fast-xml-parser";
-import fetch, { AbortError } from "node-fetch";
+import fetch, { AbortError, type Response as FetchResponse } from "node-fetch";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { getPreferences } from "./preferences";
 import { useFetch } from "@raycast/utils";
 import { API_HEADERS, BASE_URL } from "./config";
 type Fetcher<R> = (signal: AbortSignal) => Promise<R>;
@@ -91,19 +90,55 @@ export async function webdavRequest({
   base?: string;
   method: string;
 }) {
-  const { hostname, username, password } = getPreferences();
+  let response: FetchResponse;
+  try {
+    response = await fetch(`${BASE_URL}/remote.php/dav/${encodeURI(base)}`, {
+      method,
+      headers: {
+        ...API_HEADERS,
+        "Content-Type": "text/xml",
+      },
+      body,
+      signal,
+    });
+  } catch (error: unknown) {
+    const err = error as { code?: string; errno?: string; message?: string };
+    
+    // Handle DNS/network errors
+    if (err.code === "ENOTFOUND" || err.errno === "ENOTFOUND") {
+      throw new Error(
+        `Cannot resolve hostname. Please check your hostname configuration in extension preferences.`
+      );
+    }
+    
+    if (err.code === "ECONNREFUSED" || err.errno === "ECONNREFUSED") {
+      throw new Error(
+        `Connection refused. Please check if your Nextcloud server is running and accessible.`
+      );
+    }
+    
+    if (err.code === "ETIMEDOUT" || err.errno === "ETIMEDOUT") {
+      throw new Error(
+        `Connection timeout. Please check your network connection and server availability.`
+      );
+    }
+    
+    // Re-throw with more context
+    throw new Error(
+      `Network error: ${err.message || String(error)}. Please check your hostname and network connection.`
+    );
+  }
 
-  const response = await fetch(`https://${hostname}/remote.php/dav/${encodeURI(base)}`, {
-    method,
-    headers: {
-      "User-Agent": `Raycast/${environment.raycastVersion}`,
-      "Content-Type": "text/xml",
-      Authorization: "Basic " + Buffer.from(username + ":" + password).toString("base64"),
-    },
-    body,
-    signal,
-  });
   const responseBody = await response.text();
+
+  // Check for authentication errors
+  if (response.status === 401) {
+    throw new Error("Authentication failed. Please check your username and app password in extension preferences.");
+  }
+
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}: ${response.statusText}. Response: ${responseBody.substring(0, 200)}`);
+  }
 
   const parser = new XMLParser();
   const dom = parser.parse(responseBody);

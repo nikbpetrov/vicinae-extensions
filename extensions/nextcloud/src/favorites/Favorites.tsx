@@ -18,7 +18,8 @@ export function Favorites() {
 }
 
 function Item({ result }: { result: Favorite }) {
-  const { hostname } = getPreferences();
+  const preferences = getPreferences();
+  const hostname = preferences.hostname;
 
   const url = path.extname(result.filename)
     ? `https://${hostname}/apps/files/?dir=${encodeURI(result.dirname)}&view=files`

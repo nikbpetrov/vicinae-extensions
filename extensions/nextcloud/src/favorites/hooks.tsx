@@ -3,7 +3,7 @@ import { useQuery, webdavRequest } from "../nextcloud";
 import { getPreferences } from "../preferences";
 
 export function useFavorites() {
-  const { data, isLoading } = useQuery((signal) => performListFavorites(signal));
+  const { data, isLoading } = useQuery((signal) => performListFavorites(signal), []);
 
   return {
     favorites: data ?? [],
